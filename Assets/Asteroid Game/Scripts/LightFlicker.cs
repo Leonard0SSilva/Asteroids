@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// This script is to create a flickering effect on the SpriteRenderer's alpha channel (transparency) based on random parameters. 
+/// </summary>
 public class LightFlicker : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
@@ -9,7 +12,7 @@ public class LightFlicker : MonoBehaviour
 
     private float originalIntensity, flickerTime, flickerEndTime;
 
-    void Start()
+    private void Start()
     {
         if (spriteRenderer == null)
         {
@@ -23,7 +26,7 @@ public class LightFlicker : MonoBehaviour
         RandomizeFlicker();
     }
 
-    void Update()
+    private void Update()
     {
         flickerTime += Time.deltaTime;
 
@@ -38,7 +41,7 @@ public class LightFlicker : MonoBehaviour
         spriteRenderer.color = flickerColor;
     }
 
-    void RandomizeFlicker()
+    private void RandomizeFlicker()
     {
         minIntensity = Random.Range(0.1f, 0.3f);
         maxIntensity = Random.Range(0.9f, 1.1f);
