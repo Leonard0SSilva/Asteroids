@@ -16,32 +16,29 @@ public class ObjectPool : MonoBehaviour
     public class View
     {
         public List<GameObject> objectPool = new List<GameObject>();
+        public Transform poolParent;
     }
 
     public Settings settings;
     public View view = new();
 
-    private void Start()
+    public void InitializePool(Settings settings)
     {
-        InitializePool();
-    }
-
-    private void InitializePool()
-    {
+        this.settings = settings;
 #if UNITY_EDITOR
-        Transform poolParent = new GameObject("Object Pool").transform;
-        poolParent.SetParent(gameObject.transform);
+        view.poolParent = new GameObject("Object Pool").transform;
+        view.poolParent.SetParent(gameObject.transform);
 #endif
 
         view.objectPool = new List<GameObject>();
         for (int i = 0; i < settings.initialPoolSize; i++)
         {
             GameObject obj = Instantiate(settings.prefab);
-            obj.AddComponent<Disposable>().onDestroy += RemoveObjectFromPool;
-            obj.SetActive(false);
 #if UNITY_EDITOR
-            obj.transform.SetParent(poolParent, true);
+            obj.transform.SetParent(view.poolParent, true);
 #endif
+            obj.SetActive(false);
+            obj.AddComponent<Disposable>().onDestroy += RemoveObjectFromPool;
             view.objectPool.Add(obj);
         }
     }
@@ -55,7 +52,7 @@ public class ObjectPool : MonoBehaviour
     {
         foreach (GameObject obj in view.objectPool)
         {
-            if (!obj.activeInHierarchy)
+            if (!obj.activeSelf)
             {
                 obj.SetActive(true);
                 InitializeGameObject(obj);
@@ -65,12 +62,15 @@ public class ObjectPool : MonoBehaviour
 
         // If all objects are in use, create a new one
         GameObject newObj = Instantiate(settings.prefab);
+#if UNITY_EDITOR
+        newObj.transform.SetParent(view.poolParent, true);
+#endif
         view.objectPool.Add(newObj);
         InitializeGameObject(newObj);
         return newObj;
     }
 
-    public List<GameObject> GetObjectFromPool(int size)
+    public List<GameObject> GetObjectsFromPool(int size)
     {
         var gameObjects = new List<GameObject>();
         for (int i = 0; i < size; i++)

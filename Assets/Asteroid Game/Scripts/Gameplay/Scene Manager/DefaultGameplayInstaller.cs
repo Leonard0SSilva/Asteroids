@@ -12,21 +12,21 @@ public class DefaultGameplayInstaller : MonoBehaviour
     [SerializeField]
     private ObjectPool.Settings shipEnemyPoolSettings;
 
+    private ObjectPool playerPool, shipPool;
+    private EnemyPool asteroidPool;
+
     private void Awake()
     {
-        var playerPool = gameObject.AddComponent<ObjectPool>();
-        playerPool.settings = playerPoolSettings;
-
-        var asteroidPool = gameObject.AddComponent<EnemyPool>();
-        asteroidPool.settings = asteroidPoolSettings;
-        asteroidPool.enemySettings = asteroidSettings;
-
-        var shipPool = gameObject.AddComponent<ObjectPool>();
-        shipPool.settings = shipEnemyPoolSettings;
-
-        //
-
+        playerPool = gameObject.AddComponent<ObjectPool>();
+        playerPool.InitializePool(playerPoolSettings);
         playerPool.GetObjectFromPool();
+
+        asteroidPool = gameObject.AddComponent<EnemyPool>();
+        asteroidPool.enemySettings = asteroidSettings;
+        asteroidPool.InitializePool(asteroidPoolSettings);
         asteroidPool.InstantiateEnemies(startAsteroids.Value);
+
+        shipPool = gameObject.AddComponent<ObjectPool>();
+        shipPool.InitializePool(shipEnemyPoolSettings);
     }
 }
