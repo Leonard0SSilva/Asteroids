@@ -5,13 +5,14 @@ public class PlayerInstaller : MonoBehaviour
     public Vector3Reference direction;
     public PlayerInputController.Settings inputSettings;
     public MovementController.Settings movetSettings;
+    public RotateTowardsMouse.Settings rotateSettings;
 
     private void Awake()
     {
         inputSettings.direction = direction;
-        GetComponent<PlayerInputController>().settings = inputSettings;
+        gameObject.AddComponent<PlayerInputController>().settings = inputSettings;
         movetSettings.direction = direction;
-        GetComponent<MovementController>().settings = movetSettings;
+        gameObject.AddComponent<MovementController>().settings = movetSettings;
         gameObject.AddComponent<WrapAroundScreen>();
     }
 }
