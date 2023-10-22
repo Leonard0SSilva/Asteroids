@@ -59,7 +59,7 @@ public static class ReferenceExtension
         reference.onValueChange?.Invoke(value);
     }
 
-    public static void Set(this Vector2Reference reference, Vector2 value)
+    public static void Set(this Vector3Reference reference, Vector2 value)
     {
         if (reference.useConstant)
         {
@@ -73,7 +73,7 @@ public static class ReferenceExtension
         reference.onValueChange?.Invoke(value);
     }
 
-    public static void SetX(this Vector2Reference reference, float value)
+    public static void SetX(this Vector3Reference reference, float value)
     {
         if (reference.useConstant)
         {
@@ -86,7 +86,7 @@ public static class ReferenceExtension
         }
     }
 
-    public static void SetY(this Vector2Reference reference, float value)
+    public static void SetY(this Vector3Reference reference, float value)
     {
         if (reference.useConstant)
         {

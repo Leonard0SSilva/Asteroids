@@ -19,6 +19,9 @@ public class BoolReference : Reference<bool> { }
 public class Vector2Reference : Reference<Vector2> { }
 
 [Serializable]
+public class Vector3Reference : Reference<Vector3> { }
+
+[Serializable]
 public class AudioClipReference : Reference<AudioClipSettings> { }
 #endregion
 
