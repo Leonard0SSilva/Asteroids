@@ -13,6 +13,7 @@ public class PlayerInstaller : MonoBehaviour
         gameObject.AddComponent<PlayerInputController>().settings = inputSettings;
         movetSettings.direction = direction;
         gameObject.AddComponent<MovementController>().settings = movetSettings;
+        gameObject.AddComponent<RotateTowardsMouse>().settings = rotateSettings;
         gameObject.AddComponent<WrapAroundScreen>();
     }
 }
