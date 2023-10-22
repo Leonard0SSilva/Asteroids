@@ -12,5 +12,6 @@ public class PlayerInstaller : MonoBehaviour
         GetComponent<PlayerInputController>().settings = inputSettings;
         movetSettings.direction = direction;
         GetComponent<MovementController>().settings = movetSettings;
+        gameObject.AddComponent<WrapAroundScreen>();
     }
 }
