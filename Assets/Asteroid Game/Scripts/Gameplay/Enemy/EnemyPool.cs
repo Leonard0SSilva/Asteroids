@@ -4,23 +4,18 @@ using Random = UnityEngine.Random;
 
 public class EnemyPool : ObjectPool
 {
-
     [Serializable]
     public new class Settings
     {
         public Vector2 minOffsetInsideScreen, maxOffsetInsideScreen;
     }
-    public Settings enemySettings;
 
-    private void Start()
-    {
-        InstantiateEnemies(settings.initialPoolSize);
-    }
+    public Settings enemySettings;
 
     public void InstantiateEnemies(int amount)
     {
         // Calculate the number of enemies to spawn on each side
-        int enemiesPerSide = settings.initialPoolSize.Value / 4;
+        int enemiesPerSide = amount / 4;
 
         // Instantiate enemies for each side
         InstantiateEnemies(enemiesPerSide, Vector3.left);
