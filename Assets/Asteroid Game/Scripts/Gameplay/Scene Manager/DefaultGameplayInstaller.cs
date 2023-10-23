@@ -5,7 +5,7 @@ using UnityEngine;
 public class DefaultGameplayInstaller : MonoBehaviour
 {
     [SerializeField]
-    private IntReference currentLevel, currentScore;
+    private IntReference currentLevel, currentScore, playerHealth;
     [SerializeField]
     private float dificultyRate;
     [SerializeField]
@@ -25,9 +25,11 @@ public class DefaultGameplayInstaller : MonoBehaviour
     {
         currentLevel.Set(1);
         currentScore.Set(0);
+        playerHealth.Set(3);
 
         //Player
         var playerPool = gameObject.AddComponent<ObjectPool>();
+        playerPool.onDisableObjects += OnDisablePlayer;
         playerPool.InitializePool(playerPoolSettings);
         playerPool.GetObjectFromPool();
 
@@ -66,26 +68,26 @@ public class DefaultGameplayInstaller : MonoBehaviour
         shipPool.InitializePool(shipPoolSettings);
     }
 
-    private void OnCreateAsteroid(GameObject enemy)
+    private void OnCreateAsteroid(GameObject go)
     {
-        enemy.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, Random.Range(0, 360));
+        go.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, Random.Range(0, 360));
     }
 
-    private void OnDisableAsteroid(GameObject enemy)
+    private void OnDisableAsteroid(GameObject go)
     {
         for (int i = 0; i < 2; i++)
         {
-            GameObject go = mediumAsteroidPool.GetObjectFromPool();
-            go.transform.position = GetRandomPosition(enemy);
+            GameObject newGO = mediumAsteroidPool.GetObjectFromPool();
+            newGO.transform.position = GetRandomPosition(go);
         }
     }
 
-    private void OnDisableMediumAsteroid(GameObject enemy)
+    private void OnDisableMediumAsteroid(GameObject go)
     {
         for (int i = 0; i < 2; i++)
         {
-            GameObject go = smallAsteroidPool.GetObjectFromPool();
-            go.transform.position = GetRandomPosition(enemy);
+            GameObject newGO = smallAsteroidPool.GetObjectFromPool();
+            newGO.transform.position = GetRandomPosition(go);
         }
     }
 
@@ -98,7 +100,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
         return go.transform.position + new Vector3(randomX, randomY, randomZ);
     }
 
-    private async void OnDisableEnemy(GameObject enemy)
+    private async void OnDisableEnemy(GameObject go)
     {
         currentScore.Set(currentScore + 10);
         //Check for next wave of enemies
@@ -111,6 +113,27 @@ public class DefaultGameplayInstaller : MonoBehaviour
                 item.enemySettings.poolSize *= dificultyRate;
                 item.InstantiateEnemies(Mathf.RoundToInt(item.enemySettings.poolSize));
             }
+        }
+    }
+
+    private async void OnDisablePlayer(GameObject go)
+    {
+        playerHealth.Set(playerHealth - 1);
+        if (playerHealth <= 0)
+        {
+            //GameOver
+        }
+        else
+        {
+            await Task.Delay(2000);
+            go.SetActive(true);
+            var collider2D = go.GetComponent<Collider2D>();
+            var lightFlicker = go.AddComponent<LightFlicker>();
+            collider2D.enabled = false;
+            await Task.Delay(2000);
+            Destroy(lightFlicker);
+            go.GetComponent<SpriteRenderer>().color = Color.white;
+            collider2D.enabled = true;
         }
     }
 }
