@@ -44,7 +44,7 @@ public class EnemyPool : ObjectPool
         for (int i = 0; i < amount; i++)
         {
             var enemy = GetObjectFromPool();
-            enemy.transform.SetPositionAndRotation(GetRandomPointOnEdge(direction), Quaternion.identity);
+            enemy.transform.position = GetRandomPointOnEdge(direction);
         }
     }
 
