@@ -10,6 +10,7 @@ using static AudioClipSettings;
 // It also handles the management of multiple audio sources for sound effects.
 // The class uses Unity's Audio Mixer for controlling audio volumes and provides functions
 // to play, stop, and control audio playback based on various settings.
+[DefaultExecutionOrder(-100)]
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
