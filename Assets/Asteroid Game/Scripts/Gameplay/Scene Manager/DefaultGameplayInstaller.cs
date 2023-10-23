@@ -23,6 +23,9 @@ public class DefaultGameplayInstaller : MonoBehaviour
 
     private void Awake()
     {
+        currentLevel.Set(1);
+        currentScore.Set(0);
+
         //Player
         var playerPool = gameObject.AddComponent<ObjectPool>();
         playerPool.InitializePool(playerPoolSettings);
