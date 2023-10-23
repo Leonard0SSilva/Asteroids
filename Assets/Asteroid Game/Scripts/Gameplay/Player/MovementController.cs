@@ -13,7 +13,15 @@ public class MovementController : MonoBehaviour
 
     public Settings settings;
 
-    public void FixedUpdate()
+    private void OnEnable()
+    {
+        if (settings != null)
+        {
+            settings.velocity.Set(Vector3.zero);
+        }
+    }
+
+    private void FixedUpdate()
     {
         if (settings.direction.Value.magnitude == 0)
         {

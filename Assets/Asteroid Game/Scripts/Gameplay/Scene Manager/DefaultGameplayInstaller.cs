@@ -34,6 +34,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
 
         var shipPool = gameObject.AddComponent<EnemyPool>();
         enemyPools.Add(shipPool);
+        shipPool.enemySettings = shipEnemyPoolSettings;
         shipPool.onDisableObjects += OnDisableEnemy;
         shipPool.InitializePool(shipPoolSettings);
     }
@@ -47,8 +48,8 @@ public class DefaultGameplayInstaller : MonoBehaviour
             currentLevel.Set(currentLevel.Value + 1);
             foreach (var item in enemyPools)
             {
-                item.enemySettings.poolSize = (int)(item.enemySettings.poolSize * 1.1f);
-                item.InstantiateEnemies((int)item.enemySettings.poolSize);
+                item.enemySettings.poolSize *= dificultyRate;
+                item.InstantiateEnemies(Mathf.RoundToInt(item.enemySettings.poolSize));
             }
         }
     }

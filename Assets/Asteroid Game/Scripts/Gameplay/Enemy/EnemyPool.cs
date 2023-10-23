@@ -18,12 +18,24 @@ public class EnemyPool : ObjectPool
     public void InstantiateEnemies(int amount)
     {
         // Calculate the number of enemies to spawn on each side
-        int enemiesPerSide = amount / enemySettings.validSides.Count;
-
-        // Instantiate enemies for each side
-        foreach (var item in enemySettings.validSides)
+        if (amount < enemySettings.validSides.Count)
         {
-            InstantiateEnemies(enemiesPerSide, item);
+            var sides = enemySettings.validSides.GetRange(0, amount);
+            // Instantiate enemies for each side
+            foreach (var item in sides)
+            {
+                InstantiateEnemies(1, item);
+            }
+        }
+        else
+        {
+            int enemiesPerSide = 0;
+            enemiesPerSide = amount / enemySettings.validSides.Count;
+            // Instantiate enemies for each side
+            foreach (var item in enemySettings.validSides)
+            {
+                InstantiateEnemies(enemiesPerSide, item);
+            }
         }
     }
 

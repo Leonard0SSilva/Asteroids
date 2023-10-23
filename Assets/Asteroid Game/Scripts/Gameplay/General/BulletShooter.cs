@@ -55,10 +55,13 @@ public class BulletShooter : MonoBehaviour
 
     private IEnumerator DisableBullet(GameObject bullet)
     {
-        if (bullet.activeSelf)
+        if (gameObject && gameObject.activeSelf)
         {
             yield return new WaitForSeconds(settings.disableBullet);
-            bullet.SetActive(false);
+            if (bullet)
+            {
+                bullet.SetActive(false);
+            }
         }
     }
 }
