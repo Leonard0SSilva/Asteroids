@@ -5,6 +5,8 @@ using UnityEngine;
 public class DefaultGameplayInstaller : MonoBehaviour
 {
     [SerializeField]
+    private GameObjectReference player;
+    [SerializeField]
     private IntReference currentLevel, currentScore, playerHealth;
     [SerializeField]
     private float dificultyRate;
@@ -111,6 +113,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
         {
             nextLevelClip.Play();
             await Task.Delay(2000);
+            MakePlayerImunte(player.Value);
             currentLevel.Set(currentLevel.Value + 1);
             foreach (var item in enemyPools)
             {
@@ -137,13 +140,18 @@ public class DefaultGameplayInstaller : MonoBehaviour
             await Task.Delay(2000);
             reviveClip.Play();
             go.SetActive(true);
-            var collider2D = go.GetComponent<Collider2D>();
-            var lightFlicker = go.AddComponent<LightFlicker>();
-            collider2D.enabled = false;
-            await Task.Delay(2000);
-            Destroy(lightFlicker);
-            go.GetComponent<SpriteRenderer>().color = Color.white;
-            collider2D.enabled = true;
+            MakePlayerImunte(go);
         }
+    }
+
+    private async void MakePlayerImunte(GameObject go)
+    {
+        var collider2D = go.GetComponent<Collider2D>();
+        var lightFlicker = go.AddComponent<LightFlicker>();
+        collider2D.enabled = false;
+        await Task.Delay(2000);
+        Destroy(lightFlicker);
+        go.GetComponent<SpriteRenderer>().color = Color.white;
+        collider2D.enabled = true;
     }
 }
