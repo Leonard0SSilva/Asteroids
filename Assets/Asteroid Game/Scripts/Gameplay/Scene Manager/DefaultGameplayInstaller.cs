@@ -27,13 +27,13 @@ public class DefaultGameplayInstaller : MonoBehaviour
         var asteroidPool = gameObject.AddComponent<EnemyPool>();
         enemyPools.Add(asteroidPool);
         asteroidPool.enemySettings = asteroidSettings;
-        asteroidPool.onDisableEnemy += OnDisableEnemy;
+        asteroidPool.onDisableObjects += OnDisableEnemy;
         asteroidPool.InitializePool(asteroidPoolSettings);
         asteroidPool.InstantiateEnemies((int)asteroidPool.enemySettings.poolSize);
 
         var shipPool = gameObject.AddComponent<EnemyPool>();
         enemyPools.Add(shipPool);
-        shipPool.onDisableEnemy += OnDisableEnemy;
+        shipPool.onDisableObjects += OnDisableEnemy;
         shipPool.InitializePool(shipPoolSettings);
     }
 

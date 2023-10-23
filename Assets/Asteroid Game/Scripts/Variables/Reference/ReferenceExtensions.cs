@@ -141,6 +141,21 @@ public static class ReferenceExtension
         reference.onValueChange?.Invoke(value);
     }
 
+
+    public static void Set(this GameObjectReference reference, GameObject value)
+    {
+        if (reference.useConstant)
+        {
+            reference.constantValue = value;
+        }
+        else
+        {
+            GameObjectVariable variable = reference.variable as GameObjectVariable;
+            variable.Set(value);
+        }
+        reference.onValueChange?.Invoke(value);
+    }
+
     public static void Set(this GameObjectListReference reference, List<GameObject> value)
     {
         if (reference.useConstant)

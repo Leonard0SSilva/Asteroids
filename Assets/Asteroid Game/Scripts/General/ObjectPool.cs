@@ -22,13 +22,13 @@ public class ObjectPool : MonoBehaviour
     public Settings settings;
     public View view = new();
 
-    public Action<GameObject> onDisableEnemy;
+    public Action<GameObject> onCreateObjects, onResetObjects, onDisableObjects;
 
     public void InitializePool(Settings settings)
     {
         this.settings = settings;
 #if UNITY_EDITOR
-        view.poolParent = new GameObject("Object Pool").transform;
+        view.poolParent = new GameObject($"Pool: {settings.prefab.name}").transform;
         view.poolParent.SetParent(gameObject.transform);
 #endif
 
@@ -36,18 +36,27 @@ public class ObjectPool : MonoBehaviour
         for (int i = 0; i < settings.initialPoolSize; i++)
         {
             GameObject obj = Instantiate(settings.prefab);
-#if UNITY_EDITOR
-            obj.transform.SetParent(view.poolParent, true);
-#endif
             obj.SetActive(false);
-            obj.AddComponent<Disposable>().onDestroy += RemoveObjectFromPool;
-            view.objectPool.Add(obj);
+            InitializeGameObject(obj);
         }
+    }
+
+    public virtual void ResetGameObject(GameObject obj)
+    {
+        onResetObjects?.Invoke(obj);
     }
 
     public virtual void InitializeGameObject(GameObject obj)
     {
-
+#if UNITY_EDITOR
+        obj.transform.SetParent(view.poolParent, true);
+#endif
+        var disposable = obj.AddComponent<Disposable>();
+        disposable.onDisable += OnDisableObject;
+        disposable.onDestroy += OnDestroyObject;
+        onCreateObjects?.Invoke(obj);
+        ResetGameObject(obj);
+        view.objectPool.Add(obj);
     }
 
     public GameObject GetObjectFromPool()
@@ -57,17 +66,14 @@ public class ObjectPool : MonoBehaviour
             if (!obj.activeSelf)
             {
                 obj.SetActive(true);
-                InitializeGameObject(obj);
+                ResetGameObject(obj);
                 return obj;
             }
         }
 
         // If all objects are in use, create a new one
         GameObject newObj = Instantiate(settings.prefab);
-#if UNITY_EDITOR
-        newObj.transform.SetParent(view.poolParent, true);
-#endif
-        view.objectPool.Add(newObj);
+        newObj.SetActive(true);
         InitializeGameObject(newObj);
         return newObj;
     }
@@ -82,12 +88,19 @@ public class ObjectPool : MonoBehaviour
         return gameObjects;
     }
 
-    public void RemoveObjectFromPool(GameObject obj)
+    public void OnDisableObject(GameObject obj)
     {
-        if (!view.objectPool.Contains(obj))
+        if (obj)
+        {
+            onDisableObjects?.Invoke(obj);
+        }
+    }
+
+    public void OnDestroyObject(GameObject obj)
+    {
+        if (view.objectPool.Contains(obj))
         {
             view.objectPool.Remove(obj);
-            onDisableEnemy.Invoke(obj);
         }
     }
 }

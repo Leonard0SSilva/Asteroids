@@ -8,14 +8,14 @@ public class EnemyInstaller : MonoBehaviour
     public Vector2 minDirection, maxDirection;
     public float minVelocity, maxVelocity;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         movetSettings.direction = direction;
         gameObject.AddComponent<MovementController>().settings = movetSettings;
         gameObject.AddComponent<WrapAroundScreen>();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         float raondomVelocity = Random.Range(minVelocity, maxVelocity);
         movetSettings.moveSpeed.Set(raondomVelocity);

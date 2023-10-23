@@ -1,36 +1,21 @@
 using UnityEngine;
 
-public class PlayerInstaller : MonoBehaviour
+public class ShipInstaller : EnemyInstaller
 {
     [SerializeField]
-    private GameObjectReference player;
+    public GameObjectReference player;
     [SerializeField]
-    private KeyCodeVariable shootKey;
+    private Vector3Reference shootDirection;
     [SerializeField]
     private BoolReference shoot, canShoot;
-    [SerializeField]
-    private Vector3Reference direction, shootDirection;
-    [SerializeField]
-    private PlayerInputController.Settings inputSettings;
-    [SerializeField]
-    private MovementController.Settings movetSettings;
-    [SerializeField]
-    private RotateTowardsMouse.Settings rotateSettings;
     [SerializeField]
     private BulletShooter.Settings bulletShooterSettings;
     [SerializeField]
     private ObjectPool.Settings bulletPoolSettings;
 
-    private void Awake()
+    protected override void Awake()
     {
-        player.Set(gameObject);
-
-        inputSettings.direction = direction;
-        gameObject.AddComponent<PlayerInputController>().settings = inputSettings;
-        movetSettings.direction = direction;
-        gameObject.AddComponent<MovementController>().settings = movetSettings;
-        gameObject.AddComponent<RotateTowardsMouse>().settings = rotateSettings;
-        gameObject.AddComponent<WrapAroundScreen>();
+        base.Awake();
 
         var bulletPool = gameObject.AddComponent<ObjectPool>();
         bulletPool.onCreateObjects += OnCreateBullet;
@@ -40,6 +25,15 @@ public class PlayerInstaller : MonoBehaviour
         bulletShooterSettings.canShoot = canShoot;
         bulletShooterSettings.shoot = shoot;
         gameObject.AddComponent<BulletShooter>().settings = bulletShooterSettings;
+    }
+    protected override void OnEnable()
+    {
+        float raondomVelocity = Random.Range(minVelocity, maxVelocity);
+        movetSettings.moveSpeed.Set(raondomVelocity);
+        movetSettings.maxSpeed.Set(raondomVelocity);
+        movetSettings.decelerationSpeed.Set(0);
+        direction.Set(new Vector3((minDirection.x == 0 && maxDirection.x == 0) ? 0 : Mathf.Sign(Random.Range(minDirection.x, maxDirection.x))
+        , (minDirection.y == 0 && maxDirection.y == 0) ? 0 : Mathf.Sign(Random.Range(minDirection.y, maxDirection.y)), 0));
     }
 
     private void OnCreateBullet(GameObject gameObject)
@@ -56,7 +50,6 @@ public class PlayerInstaller : MonoBehaviour
 
     private void Update()
     {
-        shoot.Set(Input.GetKey(shootKey.value));
-        shootDirection.Set(gameObject.transform.right);
+        shootDirection.Set(player.Value.transform.position - gameObject.transform.position);
     }
 }

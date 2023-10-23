@@ -105,4 +105,6 @@ public class SpriteListReference : ReferenceList<Sprite> { }
 
 [Serializable]
 public class ColorReference : Reference<Color> { }
+[Serializable]
+public class GameObjectReference : Reference<GameObject> { }
 #endregion
