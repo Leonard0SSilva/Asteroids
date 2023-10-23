@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DefaultGameplayInstaller : MonoBehaviour
 {
@@ -131,7 +132,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
         {
             gameOverClip.Play();
             await Task.Delay(2000);
-            //Load Menu
+            SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
         }
         //Revive
         else
