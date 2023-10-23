@@ -15,12 +15,14 @@ public class ObjectPool : MonoBehaviour
     [Serializable]
     public class View
     {
-        public List<GameObject> objectPool = new List<GameObject>();
+        public List<GameObject> objectPool = new();
         public Transform poolParent;
     }
 
     public Settings settings;
     public View view = new();
+
+    public Action<GameObject> onDisableEnemy;
 
     public void InitializePool(Settings settings)
     {
@@ -85,6 +87,7 @@ public class ObjectPool : MonoBehaviour
         if (!view.objectPool.Contains(obj))
         {
             view.objectPool.Remove(obj);
+            onDisableEnemy.Invoke(obj);
         }
     }
 }

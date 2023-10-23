@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,6 +8,8 @@ public class EnemyPool : ObjectPool
     [Serializable]
     public new class Settings
     {
+        public float poolSize;
+        public List<Vector2> validSides = new List<Vector2>() { Vector3.left, Vector3.right, Vector3.up, Vector3.down };
         public Vector2 minOffsetInsideScreen, maxOffsetInsideScreen;
     }
 
@@ -15,13 +18,13 @@ public class EnemyPool : ObjectPool
     public void InstantiateEnemies(int amount)
     {
         // Calculate the number of enemies to spawn on each side
-        int enemiesPerSide = amount / 4;
+        int enemiesPerSide = amount / enemySettings.validSides.Count;
 
         // Instantiate enemies for each side
-        InstantiateEnemies(enemiesPerSide, Vector3.left);
-        InstantiateEnemies(enemiesPerSide, Vector3.right);
-        InstantiateEnemies(enemiesPerSide, Vector3.up);
-        InstantiateEnemies(enemiesPerSide, Vector3.down);
+        foreach (var item in enemySettings.validSides)
+        {
+            InstantiateEnemies(enemiesPerSide, item);
+        }
     }
 
     private void InstantiateEnemies(int amount, Vector3 direction)

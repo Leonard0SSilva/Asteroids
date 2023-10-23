@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class DefaultGameplayInstaller : MonoBehaviour
 {
-    public IntReference startAsteroids;
+    public float dificultyRate;
     [SerializeField]
     private ObjectPool.Settings playerPoolSettings;
     [SerializeField]
@@ -10,23 +12,42 @@ public class DefaultGameplayInstaller : MonoBehaviour
     [SerializeField]
     private EnemyPool.Settings asteroidSettings;
     [SerializeField]
-    private ObjectPool.Settings shipEnemyPoolSettings;
+    private ObjectPool.Settings shipPoolSettings;
+    [SerializeField]
+    private EnemyPool.Settings shipEnemyPoolSettings;
 
-    private ObjectPool playerPool, shipPool;
-    private EnemyPool asteroidPool;
+    private List<EnemyPool> enemyPools = new();
 
     private void Awake()
     {
-        playerPool = gameObject.AddComponent<ObjectPool>();
+        var playerPool = gameObject.AddComponent<ObjectPool>();
         playerPool.InitializePool(playerPoolSettings);
         playerPool.GetObjectFromPool();
 
-        asteroidPool = gameObject.AddComponent<EnemyPool>();
+        var asteroidPool = gameObject.AddComponent<EnemyPool>();
+        enemyPools.Add(asteroidPool);
         asteroidPool.enemySettings = asteroidSettings;
+        asteroidPool.onDisableEnemy += OnDisableEnemy;
         asteroidPool.InitializePool(asteroidPoolSettings);
-        asteroidPool.InstantiateEnemies(startAsteroids.Value);
+        asteroidPool.InstantiateEnemies((int)asteroidPool.enemySettings.poolSize);
 
-        shipPool = gameObject.AddComponent<ObjectPool>();
-        shipPool.InitializePool(shipEnemyPoolSettings);
+        var shipPool = gameObject.AddComponent<EnemyPool>();
+        enemyPools.Add(shipPool);
+        shipPool.onDisableEnemy += OnDisableEnemy;
+        shipPool.InitializePool(shipPoolSettings);
+    }
+
+    private async void OnDisableEnemy(GameObject enemy)
+    {
+        //Check for next wave of enemies
+        if (enemyPools.TrueForAll(x => x.view.objectPool.TrueForAll(x => x.activeSelf)))
+        {
+            await Task.Delay(2000);
+            foreach (var item in enemyPools)
+            {
+                item.enemySettings.poolSize = (int)(item.enemySettings.poolSize * 1.1f);
+                item.InstantiateEnemies((int)item.enemySettings.poolSize);
+            }
+        }
     }
 }
