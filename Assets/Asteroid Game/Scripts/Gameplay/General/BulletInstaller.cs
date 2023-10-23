@@ -12,6 +12,7 @@ public class BulletInstaller : MonoBehaviour
     {
         gameObject.AddComponent<DisableAfterTime>().settings = disableBulletSettings;
         gameObject.AddComponent<WrapAroundScreen>();
+        gameObject.AddComponent<DisableOnCollision>();
         var movement = gameObject.AddComponent<MovementController>();
         movementSettings.direction = shootDirection;
         movement.settings = movementSettings;
