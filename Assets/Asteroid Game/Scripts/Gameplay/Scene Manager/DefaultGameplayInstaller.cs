@@ -154,9 +154,12 @@ public class DefaultGameplayInstaller : MonoBehaviour
         {
             playerDeathClip.Play();
             await Task.Delay(2000);
-            reviveClip.Play();
-            go.SetActive(true);
-            MakePlayerImunte(go);
+            if (this)
+            {
+                reviveClip.Play();
+                go.SetActive(true);
+                MakePlayerImunte(go);
+            }
         }
     }
 
