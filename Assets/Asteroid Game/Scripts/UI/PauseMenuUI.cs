@@ -12,6 +12,7 @@ public class PauseMenuUI : MonoBehaviour
     {
         mainMenuButton.onClick.AddListener(() =>
         {
+            Time.timeScale = 1;
             if (loadMainMenuOp == null)
             {
                 loadMainMenuOp = SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
