@@ -5,7 +5,7 @@ using UnityEngine;
 public class DefaultGameplayInstaller : MonoBehaviour
 {
     [SerializeField]
-    private IntReference currentLevel;
+    private IntReference currentLevel, currentScore;
     [SerializeField]
     private float dificultyRate;
     [SerializeField]
@@ -97,6 +97,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
 
     private async void OnDisableEnemy(GameObject enemy)
     {
+        currentScore.Set(currentScore + 10);
         //Check for next wave of enemies
         if (enemyObjectPools.TrueForAll(x => x.view.objectPool.TrueForAll(x => !x.activeSelf)))
         {
