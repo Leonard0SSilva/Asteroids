@@ -40,7 +40,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
     private async void OnDisableEnemy(GameObject enemy)
     {
         //Check for next wave of enemies
-        if (enemyPools.TrueForAll(x => x.view.objectPool.TrueForAll(x => x.activeSelf)))
+        if (enemyPools.TrueForAll(x => x.view.objectPool.TrueForAll(x => !x.activeSelf)))
         {
             await Task.Delay(2000);
             foreach (var item in enemyPools)
