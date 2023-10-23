@@ -23,7 +23,12 @@ public class DefaultGameplayInstaller : MonoBehaviour
     private List<ObjectPool> enemyObjectPools = new();
     [SerializeField]
     private List<EnemyPool> enemyPools = new();
-    public AudioClipSettings destroyAsteroidClip, playerDeathClip, gameOverClip, startClip, reviveClip, nextLevelClip;
+    public AudioClipSettings musicClip, destroyAsteroidClip, playerDeathClip, gameOverClip, startClip, reviveClip, nextLevelClip;
+
+    private void OnEnable()
+    {
+        musicClip.Play();
+    }
 
     private void Awake()
     {
@@ -71,6 +76,11 @@ public class DefaultGameplayInstaller : MonoBehaviour
         shipPool.enemySettings = shipEnemyPoolSettings;
         shipPool.onDisableObjects += OnDisableEnemy;
         shipPool.InitializePool(shipPoolSettings);
+    }
+
+    private void OnDisable()
+    {
+        musicClip.Stop();
     }
 
     private void OnCreateAsteroid(GameObject go)
