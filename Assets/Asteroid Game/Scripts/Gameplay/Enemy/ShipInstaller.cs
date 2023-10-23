@@ -25,6 +25,7 @@ public class ShipInstaller : EnemyInstaller
         bulletShooterSettings.canShoot = canShoot;
         bulletShooterSettings.shoot = shoot;
         gameObject.AddComponent<BulletShooter>().settings = bulletShooterSettings;
+        gameObject.AddComponent<LightFlicker>();
     }
     protected override void OnEnable()
     {
