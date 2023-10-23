@@ -23,7 +23,11 @@ public class DefaultGameplayInstaller : MonoBehaviour
     private List<ObjectPool> enemyObjectPools = new();
     [SerializeField]
     private List<EnemyPool> enemyPools = new();
-    public AudioClipSettings musicClip, destroyAsteroidClip, playerDeathClip, gameOverClip, startClip, reviveClip, nextLevelClip;
+    [SerializeField]
+    private CameraShake cameraShake;
+    [SerializeField]
+
+    private AudioClipSettings musicClip, destroyAsteroidClip, playerDeathClip, gameOverClip, startClip, reviveClip, nextLevelClip;
 
     private void OnEnable()
     {
@@ -137,6 +141,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
     private async void OnDisablePlayer(GameObject go)
     {
         playerHealth.Set(playerHealth - 1);
+        cameraShake.ShakeCamera();
         //GameOver
         if (playerHealth <= 0)
         {
