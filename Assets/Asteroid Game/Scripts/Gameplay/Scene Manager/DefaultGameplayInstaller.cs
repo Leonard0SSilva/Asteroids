@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DefaultGameplayInstaller : MonoBehaviour
 {
+    public IntReference currentLevel;
     public float dificultyRate;
     [SerializeField]
     private ObjectPool.Settings playerPoolSettings;
@@ -43,6 +44,7 @@ public class DefaultGameplayInstaller : MonoBehaviour
         if (enemyPools.TrueForAll(x => x.view.objectPool.TrueForAll(x => !x.activeSelf)))
         {
             await Task.Delay(2000);
+            currentLevel.Set(currentLevel.Value + 1);
             foreach (var item in enemyPools)
             {
                 item.enemySettings.poolSize = (int)(item.enemySettings.poolSize * 1.1f);
