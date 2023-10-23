@@ -11,32 +11,33 @@ public class BulletShooter : MonoBehaviour
         public Vector3Reference direction;
         public Transform firePosition;
         public float fireInterval = 2.0f;
-        public float disableBullet = 2.0f;
         public BoolReference canShoot, shoot;
     }
 
     public Settings settings;
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(ShootBullets());
     }
 
-    private void OnDestroy()
-    {
-        StopCoroutine(ShootBullets());
-    }
-
     private IEnumerator ShootBullets()
     {
+        yield return new WaitForSeconds(1);
         while (true)
         {
-            if (gameObject.activeSelf && settings.shoot.Value && settings.canShoot.Value)
+            if (settings != null)
             {
-                ShootBullet();
+                if (gameObject.activeSelf && settings.shoot.Value && settings.canShoot.Value)
+                {
+                    ShootBullet();
+                }
+                yield return new WaitForSeconds(settings.fireInterval);
             }
-
-            yield return new WaitForSeconds(settings.fireInterval);
+            else
+            {
+                yield return null;
+            }
         }
     }
 
@@ -49,19 +50,5 @@ public class BulletShooter : MonoBehaviour
         float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
         Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, 0, angle));
         bullet.transform.SetPositionAndRotation(settings.firePosition.position, bulletRotation);
-
-        StartCoroutine(DisableBullet(bullet));
-    }
-
-    private IEnumerator DisableBullet(GameObject bullet)
-    {
-        if (gameObject && gameObject.activeSelf)
-        {
-            yield return new WaitForSeconds(settings.disableBullet);
-            if (bullet)
-            {
-                bullet.SetActive(false);
-            }
-        }
     }
 }

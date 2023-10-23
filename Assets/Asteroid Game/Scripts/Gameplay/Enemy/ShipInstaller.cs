@@ -50,6 +50,9 @@ public class ShipInstaller : EnemyInstaller
 
     private void Update()
     {
-        shootDirection.Set(player.Value.transform.position - gameObject.transform.position);
+        if (player.Value.activeSelf)
+        {
+            shootDirection.Set(player.Value.transform.position - gameObject.transform.position);
+        }
     }
 }
