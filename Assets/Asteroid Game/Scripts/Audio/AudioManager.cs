@@ -101,7 +101,7 @@ public class AudioManager : MonoBehaviour
         {
             AudioSource source = sfxSources[i];
 
-            if (!source.isPlaying)
+            if (source && !source.isPlaying)
             {
                 if (!availableAudioSourceFound)
                 {
@@ -112,7 +112,7 @@ public class AudioManager : MonoBehaviour
                 continue;
             }
 
-            if (source.clip == audioClipSettings.currentClip &&
+            if (source && source.clip == audioClipSettings.currentClip &&
                  Math.Abs(source.volume - audioClipSettings.volume) < 0.01f)
             {
                 return null;
@@ -187,8 +187,11 @@ public class AudioManager : MonoBehaviour
                 source = oneShotSFXSource;
             }
 
-            source.enabled = true;
-            source.PlayOneShot(audioClipSettings.currentClip, audioClipSettings.volume * source.volume);
+            if (source)
+            {
+                source.enabled = true;
+                source.PlayOneShot(audioClipSettings.currentClip, audioClipSettings.volume * source.volume);
+            }
         }
         else
         {
