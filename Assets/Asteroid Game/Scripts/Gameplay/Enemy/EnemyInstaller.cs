@@ -13,6 +13,7 @@ public class EnemyInstaller : MonoBehaviour
         movetSettings.direction = direction;
         gameObject.AddComponent<MovementController>().settings = movetSettings;
         gameObject.AddComponent<WrapAroundScreen>();
+        gameObject.AddComponent<DisableOnCollision>();
     }
 
     protected virtual void OnEnable()

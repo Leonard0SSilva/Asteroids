@@ -40,6 +40,8 @@ public class PlayerInstaller : MonoBehaviour
         bulletShooterSettings.canShoot = canShoot;
         bulletShooterSettings.shoot = shoot;
         gameObject.AddComponent<BulletShooter>().settings = bulletShooterSettings;
+
+        gameObject.AddComponent<DisableOnCollision>();
     }
 
     private void OnCreateBullet(GameObject gameObject)
