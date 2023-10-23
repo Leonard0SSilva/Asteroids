@@ -30,12 +30,12 @@ public class AudioClipSettings
         this.playAudioType = playAudioType;
     }
 
-    public void Execute()
+    public void Play()
     {
         AudioManager.Instance.Play(this, music);
     }
 
-    public void StopExecute()
+    public void Stop()
     {
         AudioManager.Instance.Stop(this, music);
     }

@@ -20,9 +20,11 @@ public class DefaultGameplayInstaller : MonoBehaviour
     private List<ObjectPool> enemyObjectPools = new();
     [SerializeField]
     private List<EnemyPool> enemyPools = new();
+    public AudioClipSettings destroyAsteroidClip, playerDeathClip, gameOverClip, startClip, reviveClip, nextLevelClip;
 
     private void Awake()
     {
+        startClip.Play();
         currentLevel.Set(1);
         currentScore.Set(0);
         playerHealth.Set(3);
@@ -102,10 +104,12 @@ public class DefaultGameplayInstaller : MonoBehaviour
 
     private async void OnDisableEnemy(GameObject go)
     {
+        destroyAsteroidClip.Play();
         currentScore.Set(currentScore + 10);
         //Check for next wave of enemies
         if (enemyObjectPools.TrueForAll(x => x.view.objectPool.TrueForAll(x => !x.activeSelf)))
         {
+            nextLevelClip.Play();
             await Task.Delay(2000);
             currentLevel.Set(currentLevel.Value + 1);
             foreach (var item in enemyPools)
@@ -119,13 +123,19 @@ public class DefaultGameplayInstaller : MonoBehaviour
     private async void OnDisablePlayer(GameObject go)
     {
         playerHealth.Set(playerHealth - 1);
+        //GameOver
         if (playerHealth <= 0)
         {
-            //GameOver
+            gameOverClip.Play();
+            await Task.Delay(2000);
+            //Load Menu
         }
+        //Revive
         else
         {
+            playerDeathClip.Play();
             await Task.Delay(2000);
+            reviveClip.Play();
             go.SetActive(true);
             var collider2D = go.GetComponent<Collider2D>();
             var lightFlicker = go.AddComponent<LightFlicker>();

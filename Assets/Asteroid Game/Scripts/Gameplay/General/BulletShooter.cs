@@ -7,6 +7,7 @@ public class BulletShooter : MonoBehaviour
     [Serializable]
     public class Settings
     {
+        public AudioClipSettings audioClipSettings;
         public ObjectPool bulletPool;
         public Vector3Reference direction;
         public Transform firePosition;
@@ -43,6 +44,10 @@ public class BulletShooter : MonoBehaviour
 
     private void ShootBullet()
     {
+        if (settings.audioClipSettings != null)
+        {
+            settings.audioClipSettings.Play();
+        }
         GameObject bullet = settings.bulletPool.GetObjectFromPool();
         bullet.transform.SetParent(null);
 

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class EnemyInstaller : MonoBehaviour
 {
-    public int health;
     public Vector3Reference direction;
     public MovementController.Settings movetSettings;
     public Vector2 minDirection, maxDirection;
