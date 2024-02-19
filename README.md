@@ -1,4 +1,6 @@
 # Asteroids
+Reference: https://www.youtube.com/watch?v=_TKiRvGfw3Q&t=46s
+
 No plugin was used.
 
 The main game system works around MVC and dependency injection inspired by: https://github.com/modesttree/Zenject
